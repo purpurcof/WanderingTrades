@@ -88,10 +88,14 @@ public final class WanderingTrades extends JavaPlugin {
     public void reload() {
         this.closeInterfaces();
 
-        this.configManager().reload();
-
-        this.listeners().reload();
-        this.playerHeads().configChanged();
+        this.getServer().getScheduler().runTaskAsynchronously(this, () -> {
+            this.configManager().reload();
+        
+        this.getServer().getScheduler().runTask(this, () -> {
+            this.listeners().reload();
+            this.playerHeads().configChanged();
+            });
+        });
     }
 
     private void closeInterfaces() {
